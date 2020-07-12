@@ -21,9 +21,16 @@ unsigned char dirty[1024];
 enum {
 	Black = 0,
 	White = 0xffff,
+	
+#if defined(ABGR1555)
+	Red = 0x001f,
+	Green = 0x03e0,
+	Blue = 0x7C00,
+#else
 	Red = 0xf800,
 	Green = 0x07e0,
 	Blue = 0x001f,
+#endif
 	Yellow = Red | Green,
 	Magenta = Red | Blue,
 	Cyan = Green | Blue,

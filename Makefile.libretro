@@ -118,6 +118,19 @@ include $(THEOS)/makefiles/common.mk
 
 LIBRARY_NAME = $(TARGET_NAME)_libretro_ios
 
+# PS2
+else ifeq ($(platform), ps2)
+   EXT?=a
+   TARGET := $(TARGET_NAME)_libretro_$(platform).$(EXT)
+   CC = ee-gcc$(EXE_EXT)
+   CXX = ee-g++$(EXE_EXT)
+   AR = ee-ar$(EXE_EXT)
+   CFLAGS += -DPS2 -G0 -DABGR1555
+   CXXFLAGS += -DPS2 -G0
+   STATIC_LINKING = 1
+   OLD_GCC = 1
+
+# PSP1
 else ifeq ($(platform), psp1)
    EXT?=a
    TARGET := $(TARGET_NAME)_libretro_$(platform).$(EXT)
@@ -511,8 +524,12 @@ fpic=
 SHARED=
 endif
 
-CFLAGS += -Wall -Wno-switch -Wno-parentheses -Wno-unused-variable -Wno-unused-but-set-variable -Wextra -Wno-unused-parameter -Wno-sign-compare -Wmissing-prototypes -DLIBRETRO=1
+CFLAGS += -Wall -Wno-switch -Wno-parentheses -Wno-unused-variable -Wno-unused-parameter -Wno-sign-compare -Wmissing-prototypes -DLIBRETRO=1
 CFLAGS += -std=gnu99
+
+ifneq ($(OLD_GCC), 1)
+CFLAGS += -Wno-unused-but-set-variable -Wextra
+endif
 
 ifeq ($(DEBUG), 1)
 ifneq (,$(findstring msvc,$(platform)))
